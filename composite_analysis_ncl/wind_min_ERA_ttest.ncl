@@ -8,7 +8,7 @@ begin
   level=(/925,850,500,200/)
 do i=0,3,1
   fils = "/home/ys17-19/cjx/observation_data/ERA-Interim/era_interim_uv.nc" 
-  outfile="/home/ys17-19/cjx/figure/composite_analysis_figure/ERA_wind_ttest_"+level(i)+"_max"
+  outfile="/home/ys17-19/cjx/figure/composite_analysis_figure/ERA_wind_ttest_"+level(i)+"_min"
   fin_ctrl = addfiles(fils,"r")
   U_in = short2flt(fin_ctrl[:]->u)
   U_ctrl = U_in(:,{level(i)},:,:)
@@ -17,16 +17,16 @@ do i=0,3,1
   ;printVarSummary(U_ctrl_ssn)
   abnormal = (/7,22,26,30,33,38/)
   normal = (/0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,23,24,25,27,28,29,31,32,34,35,36,37,39/)
-  max_U=U_ctrl_ssn(abnormal,:,:)
-  max_U_ssn  = dim_avg_n_Wrap(max_U,0)
+  min_U=U_ctrl_ssn(abnormal,:,:)
+  min_U_ssn  = dim_avg_n_Wrap(min_U,0)
   U  = dim_avg_n_Wrap(U_ctrl_ssn,0)
   U_diff = U
-  U_diff = max_U_ssn-U 
+  U_diff = min_U_ssn-U 
   nor_U=U_ctrl_ssn(normal,:,:)
 
   ;ttest
   siglvl = 0.05
-  xtmp = max_U(latitude |:,longitude |:,time |:)
+  xtmp = min_U(latitude |:,longitude |:,time |:)
   ytmp = nor_U(latitude |:,longitude |:,time |:)
   aveX = dim_avg(xtmp)
   aveY = dim_avg(ytmp)
@@ -48,18 +48,18 @@ do i=0,3,1
 ;  V_ctrl = fin_ctrl->H(120:359:1,{500},:,:)
   V_ctrl_ssn = month_to_season(V_ctrl,"MAM")
   ;printVarSummary(V_ctrl_ssn)
-  abnormal = (/7,22,26,30,33,38/)
-  normal = (/0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,23,24,25,27,28,29,31,32,34,35,36,37,39/)
-  max_V=V_ctrl_ssn(abnormal,:,:)
-  max_V_ssn  = dim_avg_n_Wrap(max_V,0)
+  abnormal = (/2,4,8,12,14,18,36/)
+  normal = (/0,1,3,5,6,7,9,10,11,13,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,37,38,39/)
+  min_V=V_ctrl_ssn(abnormal,:,:)
+  min_V_ssn  = dim_avg_n_Wrap(min_V,0)
   V  = dim_avg_n_Wrap(V_ctrl_ssn,0)
   V_diff = V
-  V_diff = max_V_ssn-V 
+  V_diff = min_V_ssn-V 
   nor_V=V_ctrl_ssn(normal,:,:)
 
   ;ttest
   siglvl = 0.05
-  xtmp = max_V(latitude |:,longitude |:,time |:)
+  xtmp = min_V(latitude |:,longitude |:,time |:)
   ytmp = nor_V(latitude |:,longitude |:,time |:)
   aveX = dim_avg(xtmp)
   aveY = dim_avg(ytmp)
@@ -102,7 +102,7 @@ do i=0,3,1
   res@gsnMaximize      = True       ; fill up the page
   res@gsnLeftString   = " "                   
   res@gsnRightString  = " "                 
-  res@gsnCenterString = "max year Wind"+level(i)+" diff" 
+  res@gsnCenterString = "min year Wind"+level(i)+" diff" 
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@tiMainOn               = False
    res@mpFillOn               = False

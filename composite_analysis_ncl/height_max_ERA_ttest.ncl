@@ -58,7 +58,7 @@ do i=0,3,1
   res@gsnMaximize      = True       ; fill up the page
   res@gsnLeftString   = ""                   
   res@gsnRightString  = ""                 
-  res@gsnCenterString = "MAX Year Z"+level(i)+" Diff "
+  res@gsnCenterString = "max year Z"+level(i)+" diff "
   res@mpCenterLonF = 180.
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@mpFillOn               = False
@@ -110,6 +110,12 @@ do i=0,3,1
 
   plot1 = gsn_csm_contour_map(wks,var_diff,res)
   plot2 = gsn_csm_contour(wks,pre_diff_sig,res4)
+  polyres                   = True
+  polyres@gsMarkerIndex     = 10          ; polymarker style
+  polyres@gsMarkerSizeF     = 16.          ; polymarker size
+  polyres@gsMarkerThicknessF     = 6.          ; polymarker size
+  polyres@gsMarkerColor     = "green"          ; polymarker size
+  plot1@$unique_string("fxxk ncl")$    = gsn_add_polymarker(wks,plot1,115,0,polyres)
   overlay(plot1,plot2)
   draw(plot1)
   frame(wks)
