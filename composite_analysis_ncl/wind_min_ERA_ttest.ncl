@@ -1,12 +1,12 @@
 begin
   g_font = 0.025
-  lat_N=70
-  lat_S=-70
-  lon_E=90
-  lon_W=280
   l_thick= 2
+    lat_N=80
+    lat_S=-70
+    lon_E=90
+    lon_W=300
   level=(/925,850,500,200/)
-do i=0,3,1
+do i=3,3,1
   fils = "/home/ys17-19/cjx/observation_data/ERA-Interim/era_interim_uv.nc" 
   outfile="/home/ys17-19/cjx/figure/composite_analysis_figure/ERA_wind_ttest_"+level(i)+"_min"
   fin_ctrl = addfiles(fils,"r")
@@ -113,6 +113,8 @@ do i=0,3,1
   ;res@pmTickMarkDisplayMode = "Always"
   ;; 箭头头部大小一致。若要绘制头部大小不一致箭头可参考第4章示例。
 
+  res@vcFillArrowHeadInteriorXF=0.20
+  res@vcFillArrowWidthF= 0.08
   res@vcFillArrowEdgeColor     = "grey"
   res@vcFillArrowFillColor     = "grey"
   res@vcGlyphOpacityF           =0.2
@@ -122,7 +124,7 @@ do i=0,3,1
   ;; 参考箭头
   res@vcRefAnnoOn               = True  
   res@vcRefMagnitudeF           = 2      ;标准长度箭头所表示的大小
-  res@vcRefLengthF              = 0.05  ;标准长度箭头在图形中的长度
+  res@vcRefLengthF              = 0.03  ;标准长度箭头在图形中的长度
   res@vcRefAnnoBackgroundColor  = "white" ;背景颜色     
   res@vcRefAnnoPerimOn          = False   ;关闭边框   
   res@vcRefAnnoFontHeightF      = 0.014   ;参考箭头标签字体大小      
@@ -152,6 +154,8 @@ do i=0,3,1
 ; res4@mpGridSpacingF         = 10.     ;
   ;re4s@pmTickMarkDisplayMode = "Always"
   ;; 4箭头头部大小一致。若要绘制头部大小不一致箭头可参考第4章示例。
+  res4@vcFillArrowWidthF= 0.08
+  res4@vcFillArrowHeadInteriorXF=0.20
   res4@vcFillArrowEdgeColor     = "black"
   res4@vcFillArrowFillColor     = "black"
   res4@vcFillArrowMinFracWidthF = 0.3 
@@ -160,7 +164,7 @@ do i=0,3,1
   ;; 4参考箭头
   res4@vcRefAnnoOn               = True  
   res4@vcRefMagnitudeF           = 2      ;标准长度箭头所表示的大小
-  res4@vcRefLengthF              = 0.05  ;标准长度箭头在图形中的长度
+  res4@vcRefLengthF              = 0.03  ;标准长度箭头在图形中的长度
   res4@vcRefAnnoBackgroundColor  = "white" ;背景颜色     
   res4@vcRefAnnoPerimOn          = False   ;关闭边框   
   res4@vcRefAnnoFontHeightF      = 0.014   ;参考箭头标签字体大小      
@@ -168,7 +172,7 @@ do i=0,3,1
   res4@vcRefAnnoString2On        = True    ;        下的字符
   res4@vcRefAnnoString2          = "2 m/s" 
   res4@vcRefAnnoOrthogonalPosF   = 0.155
-  res4@vcMinDistanceF            = 0.02
+  res4@vcMinDistanceF            = 0.03
   res4@vcRefAnnoArrowEdgeColor   ="black"
   res4@vcRefAnnoArrowFillColor   ="black"
 
@@ -188,5 +192,17 @@ do i=0,3,1
 delete(res)
 delete(res4)
 delete(level)
+delete(normal)
+delete(abnormal)
+delete(min_U)
+delete(min_U_ssn)
+delete(U)
+delete(U_diff)
+delete(nor_U)
+delete(min_V)
+delete(min_V_ssn)
+delete(V)
+delete(V_diff)
+delete(nor_V)
 ;delete(case_name)
 end

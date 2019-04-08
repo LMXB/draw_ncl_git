@@ -1,7 +1,7 @@
 begin
 ;case_name="HEAT_MC"
   level=(/1000,900,500,200/)
-  do i=0,0,1
+  do i=0,3,1
   ;outfile="/home/ys17-19/cjx/figure/heat_test_figure/global_wind_"+level(i)+"_ttest"
   outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/global_wind_"+level(i)+"_ttest"
   ;HEAT_file="/home/ys17-19/cjx/all_output_data/HEAT_MC_output/HEAT_MC.cam.h0.250-289.nc"
@@ -71,7 +71,7 @@ begin
     plot1 = new(1,"graphic")
     plot2 = new(1,"graphic")
    
-  wks = gsn_open_wks("x11",outfile)     
+  wks = gsn_open_wks("png",outfile)     
   gsn_define_colormap(wks,"GrayWhiteGray")
    
   res                 = True  
@@ -139,9 +139,9 @@ begin
   ;; 4箭头头部大小一致。若要绘制头部大小不一致箭头可参考第4章示例。
   res4@vcFillArrowEdgeColor     = "black"
   res4@vcFillArrowFillColor     = "black"
-  res4@vcFillArrowMinFracWidthF = 0.5 
-  res4@vcFillArrowHeadMinFracXF = 0.5  
-  res4@vcFillArrowHeadMinFracYF = 0.5 
+  res4@vcFillArrowMinFracWidthF = 0.3 
+  res4@vcFillArrowHeadMinFracXF = 0.3  
+  res4@vcFillArrowHeadMinFracYF = 0.3 
   ;; 4参考箭头
   res4@vcRefAnnoOn               = True  
   res4@vcRefMagnitudeF           = 2      ;标准长度箭头所表示的大小

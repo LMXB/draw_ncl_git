@@ -1,18 +1,18 @@
 begin
-  level=(/850,500,200/)
+  level=(/1000,900,500,200/)
   ;case_name="HEAT_F"
   g_font = 0.025
   l_thick= 2
-  do i=0,2,1
-  ;outfile="/home/ys17-19/cjx/figure/HEAT_MC_figure/global_temp_"+level(i)+"_ttest"
-  outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/global_temp_"+level(i)+"_ttest"
+  do i=0,3,1
+  ;outfile="/home/ys17-19/cjx/figure/HEAT_MC_figure/global_PTENDT_"+level(i)+"_ttest"
+  outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/global_PTENDT_"+level(i)+"_ttest"
   ;HEAT_file="/home/ys17-19/cjx/all_output_data/HEAT_MC_output/HEAT_MC.cam.h0.250-289.nc"
   HEAT_file="/home/ys17-19/cjx/all_output_data/"+case_name+"_output/"+case_name+".cam.h0.250-289.nc"
   CTRL_file="/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc"
   fin_heat = addfile(HEAT_file,"r")
   fin_ctrl = addfile(CTRL_file,"r")
-  pre_heat = fin_heat->T(120:479:1,{level(i)},:,:)
-  pre_ctrl = fin_ctrl->T(120:479:1,{level(i)},:,:)
+  pre_heat = fin_heat->PTENDT(120:479:1,{level(i)},:,:)
+  pre_ctrl = fin_ctrl->PTENDT(120:479:1,{level(i)},:,:)
   pre_heat_ssn = month_to_season(pre_heat,"MAM")
   pre_ctrl_ssn = month_to_season(pre_ctrl,"MAM")
   pre_diff_ssn = pre_heat_ssn
@@ -45,7 +45,7 @@ begin
     plot1 = new(1,"graphic")
     plot2 = new(1,"graphic")
    
-  wks = gsn_open_wks("png",outfile)     
+  wks = gsn_open_wks("x11",outfile)     
   gsn_define_colormap(wks,"BlueWhiteOrangeRed")
    
   res                 = True  
@@ -54,7 +54,7 @@ begin
   res@gsnMaximize      = True       ; fill up the page
   res@gsnLeftString   = ""                   
   res@gsnRightString  = ""                 
-  res@gsnCenterString = "T"+level(i)+" Diff "
+  res@gsnCenterString = "PTENDT"+level(i)+" Diff "
   res@mpCenterLonF = 180.
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@mpFillOn               = False
@@ -64,12 +64,10 @@ begin
 ;  res@mpGridSpacingF         = 10.     ;
   ;res@pmTickMarkDisplayMode = "Always"
   res@cnLevelSelectionMode  = "ManualLevels" ; set manual contour levels
-;  res@cnLevels      =(/-400, -300,-1000,-100, 0, 100 ,400,800, 11000,1600,10000 /)
- ; res@cnFillColors =(/10,26,42,58,74,90,106,122,138,154,170,186,202,218,234,250/)
-  res@cnFillColors =(/42, 58, 74, 90, 122, 138, 170, 186, 202, 218/)
-  res@cnMinLevelValF        = -0.8         ; set min contour level
-  res@cnMaxLevelValF        = 0.8         ; set max contour level
-  res@cnLevelSpacingF       = 0.2          ; set contour interval
+  res@cnFillColors =(/ 58, 74, 90, 122, 138, 170, 186, 202/)
+  res@cnMinLevelValF        = -0.003         ; set min contour level
+  res@cnMaxLevelValF        = 0.003         ; set max contour level
+  res@cnLevelSpacingF       = 0.001          ; set contour interval
   res@cnFillOn      = True                  
   res@cnLinesOn     = False                 
   res@lbLabelFontHeightF = g_font

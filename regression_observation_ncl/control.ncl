@@ -9,11 +9,11 @@ begin
     g_font = 0.025    
     l_thick= 2
 
-    do i=0,6,1
+    do i=1,1,1
         print(lon_array(i))
-        load "regression_precip.ncl"
-        load "regression_precip_z500.ncl"
+        ;load "regression_precip.ncl"
+        ;load "regression_precip_z500.ncl"
         load "regression_uwnd200.ncl"
-        load "regression_wind200.ncl"
+        ;load "regression_wind200.ncl"
     end do
 end

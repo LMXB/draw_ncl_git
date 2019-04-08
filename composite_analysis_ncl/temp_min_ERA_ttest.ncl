@@ -1,9 +1,9 @@
 begin
   g_font = 0.025
-  lat_N=70
-  lat_S=-70
-  lon_E=90
-  lon_W=280
+    lat_N=80
+    lat_S=-70
+    lon_E=90
+    lon_W=300
   l_thick= 2
   level=(/925,850,500,200/)
 do i=0,3,1
@@ -18,10 +18,10 @@ do i=0,3,1
   abnormal = (/2,4,8,12,14,18,36/)
   normal = (/0,1,3,5,6,7,9,10,11,13,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,37,38,39/)
   min_var=pre_ctrl_ssn(abnormal,:,:)
-  var_min  = dim_avg_n_Wrap(min_var,0)
+  min_var_ssn  = dim_avg_n_Wrap(min_var,0)
   var  = dim_avg_n_Wrap(pre_ctrl_ssn,0)
   var_diff = var
-  var_diff = var_min-var
+  var_diff = min_var_ssn-var
   
   nor_var=pre_ctrl_ssn(normal,:,:)
 
@@ -120,4 +120,14 @@ do i=0,3,1
   draw(plot1)
   frame(wks)
 end do
+delete(res)
+delete(res4)
+delete(level)
+delete(normal)
+delete(abnormal)
+delete(min_var)
+delete(min_var_ssn)
+delete(var)
+delete(var_diff)
+delete(nor_var)
 end

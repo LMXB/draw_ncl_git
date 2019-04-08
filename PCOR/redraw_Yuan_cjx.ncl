@@ -28,6 +28,8 @@ begin
 lon_array=(/10.0, 115.0, 140.0, 155.0, 231.0,  284.0, 310.0/)
 lat_array=(/0.0,  0.0,   -5.0,  5.0,   5.0,    0.0,   0.0/)
 range =10
+g_font = 0.025
+l_thick= 2
 
 
 ;================================================
@@ -38,15 +40,15 @@ range =10
 
 ;global variables
     ;Define parameters
-    g_data_path = "/home/ys17-19/cjx/sst/HadISST_monthly_197901_201812.nc"
-    g_data_path2="/home/ys17-19/cjx/GPCP/gpcp_v02r03_monthly_197901_201901.nc"
-    g_data_path3="/home/ys17-19/cjx/ERA-Interim/era_interim_moda_monthly_197901_201812.nc"
+    g_data_path = "/home/ys17-19/cjx/observation_data/sst/HadISST_monthly_197901_201812.nc"
+    g_data_path2="/home/ys17-19/cjx/observation_data/gpcp_v02r03_monthly_197901_201901.nc"
+    g_data_path3="/home/ys17-19/cjx/observation_data/ERA-Interim/era_interim_z.nc"
 
     ;Fig region
-    g_figlatS=-90
-    g_figlatN=90
-    g_figlonE=0
-    g_figlonW=360
+    g_figlatS=-70
+    g_figlatN=70
+    g_figlonE=90
+    g_figlonW=280
 
     ;Nino 3
     g_latS=-5.
@@ -57,12 +59,12 @@ range =10
 ; create an array of desired pressure levels:
 
         
-do i=0,6,1
+do i=1,1,1
     g_font = 0.018
     g_season = "MAM"
     g_strt_mon = 197901 
     g_lst_mon = 201812
-    g_fig_name    =   "/home/ys17-19/cjx/GPCP/PCOR/PCOR precip in area (lon="+lon_array(i)+", lat="+lat_array(i)+")&z500 -nino3"
+    g_fig_name    =   "/home/ys17-19/cjx/figure/PCOR/PCOR precip in area (lon="+lon_array(i)+", lat="+lat_array(i)+")&z500 -nino3"
    ; g_fig_title     = " PCOR ("+(/"JJA", "SON", "DJF", "MAM1", "JJA1"/)+" SSTA & Wind850, DJF Nino3)"
 
 
@@ -151,90 +153,43 @@ do i=0,6,1
 ; Mission 3. Set plot parameters and plot
 ; ==============================================================
 
-  wks = gsn_open_wks("png",g_fig_name)  ; open a ps file
-;  wks = gsn_open_wks("pdf","up_T_surface_cte_mean_250-400hPa")  ; open a ps file
-;  wks = gsn_open_wks("x11","diabatic_heat_250-500hPa")  ; open a ps file
-
-;  plot = new((/5/),graphic)
-;  plot_V = new((/5/),graphic)
-;  plot_tp = new((/2/),graphic)
-;  plot_sh = new((/2/),graphic)
-;  plot_V = new((/2/),graphic)
-
-;  gsn_define_colormap(wks,"BlAqGrYeOrReVi200") ; choose a colormap 
-;   gsn_define_colormap(wks","Rainbow") ; choose a colormap
-;   gsn_define_colormap(wks,"BlGrYeOrReVi200") ; choose a colormap
-;  gsn_define_colormap(wks,"precip4_diff_19lev")
-;  gsn_define_colormap(wks,"precip_diff_12lev")
-; gsn_define_colormap(wks,"BkBlAqGrYeOrReViWh200")
-; gsn_define_colormap(wks,"WhiteBlueGreenYellowRed")
- gsn_define_colormap(wks,"temp_diff_18lev")
+wks = gsn_open_wks("png",g_fig_name)  ; open a ps file
+gsn_define_colormap(wks,"BlueWhiteOrangeRed")
 
 
 ;-----------------------------------------------------------------------------
-  res                  = True       ; use plot options
+res=True
+res@gsnDraw         = False
+res@gsnFrame        = False
+res@gsnLeftString   = " "                   
+res@gsnRightString  = " "                 
+res@gsnCenterString = "PCOR precip in area (lon="+lon_array(i)+", lat="+lat_array(i)+")&Z500 -nino3"
+res@cnLineThicknessF =3.
+res@cnLinesOn            = False
+res@cnFillOn             = True
+res@cnLevelSelectionMode = "ExplicitLevels"
+res@cnFillColors =(/2,17,33,49,113,129,193,209,225,241/)
+;res@cnMinLevelValF        = -0.4         ; set min contour level
+;res@cnMaxLevelValF        = 0.4         ; set max contour level
+;res@cnLevelSpacingF       = 0.1          ; set contour interval
+res@cnLevels =(/-0.45,-0.4,-0.35,-0.3,0,0.3,0.35,0.4,0.45/)
+res@mpFillOn=False
+res@mpCenterLonF =180
+res@lbLabelFontHeightF = g_font
+res@tmYLMajorLengthF=0.01
+res@tmXBMajorLengthF=0.01
+res@tmXBLabelFontHeightF = g_font
+res@tmYLLabelFontHeightF = g_font
+res@tmXBTickSpacingF =60
+res@tmYLTickSpacingF =30
+res@pmLabelBarOrthogonalPosF = 0.15
+res@mpGeophysicalLineThicknessF =l_thick
 
-  res@cnFillOn             = True               ; turn on color for contours
-  res@cnLinesOn            = False              ; turn off contour lines
-  res@cnLineLabelsOn       = False              ; turn off contour line labels
-
-
-
- ; i = NhlNewColor(wks,0.341,0.,0.533)              ; add gray to colormap
- ; j = NhlNewColor(wks,1,0.,0.)
-;  res@mpLandFillColor       = "gray"            ; set land to be gray
-
-  res@cnLevelSelectionMode = "ExplicitLevels"   ; set manual contour levels
-  res@cnLevels = (/-0.45,-0.35,-0.25,-0.15,0,0.15,0.25,0.35,0.45/)
-  res@cnFillColors =(/1,3,5,7,10,12,15,17,19,20/)
-
-
-  res@gsnFrame         = False
-  res@gsnDraw  = False
-  
-  res@gsnSpreadColors      = True               ; use full color map
-;  res@gsnSpreadColorStart  = 2               ; start at color 17
-;  res@gsnSpreadColorEnd    = 14                ; end at color 200
-
-;  res@gsnPanelLabelBar    = True   ;Turn on panel labelbar
-  res@gsnStringFontHeightF = g_font
-
-  res@gsnMaximize      = True       ; fill up the page
-  res@gsnAddCyclic   = True;False
-  res@gsnPaperOrientation = "portrait"
-  res@gsnContourZeroLineThicknessF = 2.  ;set thickness of zero
-
-
-  res@lbLabelBarOn = True   ; turn off the label bar
-  res@lbOrientation          = "horizontal"
-  res@pmLabelBarOrthogonalPosF= 0.4
-  res@lbLabelFontHeightF  = g_font              ; make labels smaller
-  ;res@lbLabelStride = 1
-
-  res@mpFillOn   = False     ; turn off gray continents
-  res@mpGeophysicalLineThicknessF = 2
-  res@mpGeophysicalLineColor      = "black";"white" 
-  res@mpFillDrawOrder="PostDraw"
-  res@mpCenterLonF = 180.
   res@mpMaxLatF  = g_figlatN
   res@mpMinLatF  = g_figlatS
   res@mpMaxLonF  = g_figlonW
   res@mpMinLonF  = g_figlonE
 
-  res@tmYLMajorLengthF=0.01
-  res@tmXBMajorLengthF=0.01
-  res@tmYROn = False
-  res@tmXTOn = False
-  res@tmYLTickSpacingF=30
-  res@tmYLMinorOn = False
-  res@tmXBMinorOn = False
-  res@tmXBLabelFontHeightF = g_font
-  res@tmYLLabelFontHeightF = g_font
-
-
-    res@gsnCenterString = "PCOR precip in area (lon="+lon_array(i)+", lat="+lat_array(i)+")&Z500 -nino3"
-    res@gsnLeftString = ""
-    res@gsnRightString = ""
     plot1 = new(1,"graphic")
     plot2 = new(1,"graphic")
   res4                  = True       ; use plot options
@@ -259,32 +214,13 @@ do i=0,6,1
   res4@lbLabelBarOn =False
   plot1 = gsn_csm_contour_map_ce(wks,pr12_3,res)
   plot2 = gsn_csm_contour(wks,sig,res4)
+  polyres                   = True
+  polyres@gsMarkerIndex     = 2          ; polymarker style
+  polyres@gsMarkerSizeF     = 16.          ; polymarker size
+  polyres@gsMarkerThicknessF     = 6.          ; polymarker size
+  polyres@gsMarkerColor     = "green"          ; polymarker size
+  plot1@$unique_string("fxxk ncl")$    = gsn_add_polymarker(wks,plot1,lon_array(i),lat_array(i),polyres)
   overlay(plot1,plot2)
-   ; plot = gsn_csm_contour_map_ce(wks,pr12_3,res) ; create a default plot
-   ; plot(i) = gsn_csm_contour_map_ce(wks,pr12_3(i,:,:),res) ; create a default plot
-   ; plot_V(i) = gsn_csm_vector(wks,pr12_3_u(i,:,:),pr12_3_v(i,:,:),vcres)
-   ; overlay(plot(i),plot_V(i))
-;end do
-
-
-
-
-
-  ;plot_V(1) = gsn_csm_vector(wks,cp_diff_var2,cp_diff_var3,vcres)
-
-;  plot_sh(0) = gsn_csm_contour(wks,diff_var1_sig,res4)
-
-  ;plot_sh(1) = gsn_csm_contour(wks,cp_diff_var1_sig,res4)
-
-  ;overlay(plot(1),plot_sh(1))
-
-  ;overlay(plot(0),plot_V(0))
-  ;overlay(plot(1),plot_V(1))
-  ;pres= True 
-  ;pres@gsnPanelLabelBar   = True      ;Universial colorbar
-  ;pres@lbLabelFontHeightF = 0.012
-
-  ;gsn_panel(wks,plot,(/5,1/),pres)
   draw(plot1)
   frame(wks)
   delete(var1)

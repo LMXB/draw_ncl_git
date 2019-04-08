@@ -1,27 +1,25 @@
 begin
 l_thick= 3
 g_font = 0.025
-u_file="/home/yangsong3/data-observation/NCEP_DOE/monthly/197901-201801/uwnd.mon.mean.nc"
-v_file="/home/yangsong3/data-observation/NCEP_DOE/monthly/197901-201801/vwnd.mon.mean.nc"
-fin_u = addfile(u_file,"r")
-fin_v = addfile(v_file,"r")
-uwnd = fin_u->uwnd(0:467:1,:,:,:)
-printVarSummary(uwnd)
+in_file="/home/ys17-19/cjx/all_output_data/HEAT_EMC_output/HEAT_EMC.cam.h0.250-289.nc"
+fin_u = addfile(in_file,"r")
+fin_v = addfile(in_file,"r")
+uwnd = fin_u->U(12:467:1,:,:,:)
+;printVarSummary(uwnd)
 uwnd_ssn = month_to_season(short2flt(uwnd),"MAM")
 
-vwnd = fin_v->vwnd(0:467:1,:,:,:)
-printVarSummary(vwnd)
+vwnd = fin_v->V(12:467:1,:,:,:)
+;printVarSummary(vwnd)
 vwnd_ssn = month_to_season(short2flt(vwnd),"MAM")
 ;printVarSummary(vwnd_ssn)
 
-in_file="/home/yangsong3/data-observation/NCEP_DOE/monthly/197901-201801/air.mon.mean.nc"
 fin_air = addfile(in_file,"r")
-air = fin_air->air(0:467:1,:,:,:)
-printVarSummary(air)
+air = fin_air->T(12:467:1,:,:,:)
+;printVarSummary(air)
 air_ssn = month_to_season(short2flt(air),"MAM")
 
 lat=uwnd&lat
-plvl=uwnd&level
+plvl=uwnd&lev_p
 epf=epflux(uwnd,vwnd,air,plvl,lat,False)
 printVarSummary(epf)
   Fphi=epf[0]
@@ -29,7 +27,7 @@ printVarSummary(epf)
   EPdiv=epf[2]
   dudt =epf[3]
 
-  wks = gsn_open_wks("png","./Fphi")        
+  wks = gsn_open_wks("png","/home/ys17-19/cjx/figure/epflux/Fphi")        
   res                 = True  
   res@gsnDraw         = False
   res@gsnFrame        = False
@@ -63,21 +61,21 @@ printVarSummary(epf)
   draw(plot)
   frame(wks)
 
-  wks = gsn_open_wks("png","./Fp")
+  wks = gsn_open_wks("png","/home/ys17-19/cjx/figure/epflux/Fp")
   res@gsnCenterString = "E-P flux Fp"
   plot  = gsn_csm_contour(wks,Fp,res)
   plot = ColorNegDashZeroPosContour(plot, "black" ,"black", "red")
   draw(plot)
   frame(wks)
 
-  wks = gsn_open_wks("png","./EPdiv")
+  wks = gsn_open_wks("png","/home/ys17-19/cjx/figure/epflux/EPdiv")
   res@gsnCenterString = "E-P flux EPdiv"
   plot  = gsn_csm_contour(wks,EPdiv,res)
   plot = ColorNegDashZeroPosContour(plot, "black" ,"black", "red")
   draw(plot)
   frame(wks)
 
-  wks = gsn_open_wks("png","./dudt")
+  wks = gsn_open_wks("png","/home/ys17-19/cjx/figure/epflux/dudt")
   res@gsnCenterString = "E-P flux dudt"
   plot  = gsn_csm_contour(wks,dudt,res)
   plot = ColorNegDashZeroPosContour(plot, "black" ,"black", "red")
