@@ -11,16 +11,14 @@ begin
  
 
     outfile="/home/ys17-19/cjx/figure/ctrl_figure/global_ctrl_precc"
-    CTRL_file="/home/ys17-19/data-model/CESM_CTRL/F2000_F19_CAM4_CTRL/pro/CTRL.cam.h0.PRECC.1-110.nc"
+    CTRL_file="/home/ys17-19/cjx/observation_data/gpcp_v02r03_monthly_197901_201901.nc"
     fin_ctrl = addfile(CTRL_file,"r")
     g_font=0.02
  
 ;;; get variables: temperature, longitude, latitude
  
-    pre_ctrl = fin_ctrl->PRECC(120:359:1,:,:) 
-    pre      = pre_ctrl
-    pre      = pre_ctrl * 86400 * 1000
-    pre_ctrl_ssn = month_to_season(pre,"MAM")
+    pre_ctrl = fin_ctrl->precip(0:479:1,:,:) 
+    pre_ctrl_ssn = month_to_season(pre_ctrl,"MAM")
     PREC = dim_avg_n_Wrap(pre_ctrl_ssn,0)
     printVarSummary(PREC)
 
@@ -29,19 +27,19 @@ begin
 ;;;;
  
  
-    wks = gsn_open_wks("png",outfile)                 ; open wk station
+    wks = gsn_open_wks("x11",outfile)                 ; open wk station
     gsn_define_colormap(wks,"precip_diff_12lev")
 
     res                        = True         ; mods desired  
     res@cnFillOn             = True               ; turn on color for contours
     res@cnLinesOn            = False              ; turn off contour lines
     res@cnLineLabelsOn       = False              ; turn off contour line labels
-   ; res@cnLevelSelectionMode  = "ManualLevels" ; set manual contour levels
-   ; res@cnMinLevelValF        = 10.0         ; set min contour level
-   ;  res@cnMaxLevelValF        = 1.5          ; set max contour level
-   ; res@cnLevelSpacingF       = 10.0          ; set contour interval
+    res@cnLevelSelectionMode  = "ManualLevels" ; set manual contour levels
+    res@cnMinLevelValF        = 1.0         ; set min contour level
+    res@cnMaxLevelValF        = 10          ; set max contour level
+    res@cnLevelSpacingF       = 1.          ; set contour interval
    ;  res@cnLevels      =(/-1.5,-1,-0.5,0,0.5,1,1.5/)
-   ;  res@cnFillColors =(/2,4,5,6,7,9,10,11,13/)
+     res@cnFillColors =(/2,4,5,6,7,9,10,11,13/)
 
 
     res@gsnFrame         = False

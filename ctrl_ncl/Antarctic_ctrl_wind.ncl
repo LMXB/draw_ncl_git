@@ -1,10 +1,11 @@
 begin
+level=1000
   outfile="/home/ys17-19/cjx/figure/ctrl_figure/Antarctic_ctrl_wind_850"
-  f_ctrl_U = addfile("/home/ys17-19/data-model/CESM_CTRL/F2000_F19_CAM4_CTRL/pro/CTRL.cam.h0.U.1-110.nc","r")
-  f_ctrl_V = addfile("/home/ys17-19/cjx/output_data/CTRL.cam.h0.1-65.V.nc","r")
+  f_ctrl_U = addfile("/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc","r")
+  f_ctrl_V = addfile("/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc","r")
 
-  u_ctrl = f_ctrl_U->U(120:359:1,{850},:,:)      
-  v_ctrl = f_ctrl_V->V(120:359:1,{850},:,:)
+  u_ctrl = f_ctrl_U->U(120:359:1,{level},:,:)      
+  v_ctrl = f_ctrl_V->V(120:359:1,{level},:,:)
  
   v_ctrl_ssn = month_to_season(v_ctrl,"MAM")
   u_ctrl_ssn = month_to_season(u_ctrl,"MAM")
@@ -12,21 +13,21 @@ begin
   v = dim_avg_n_Wrap(v_ctrl_ssn,0)
 
 
-  wks = gsn_open_wks("png",outfile) 
+  wks = gsn_open_wks("x11",outfile) 
 
   res                      = True          ; Plot options desired.
 ;  res@mpLimitMode         ="Stereographic"  
 ;  res@mpMinLatF            = -90          
-   res@mpMaxLatF            = -45
+  ; res@mpMaxLatF            = -45
 ;  res@mpMinLonF            = 30
 ;  res@mpMaxLonF            = 130
 
 
-  res@gsnPolar              = "SH"
+  ;res@gsnPolar              = "SH"
 
   res@gsnRightString       = ""
-  res@tiMainString         = "wind_850hPa_MAM" 
-  
+  res@tiMainString         = "wind_"+level+"hPa_MAM" 
+  res@mpCenterLonF = 180. 
   res@pmTickMarkDisplayMode = "Always" 
   
   res@vcGlyphStyle         = "FillArrow" ;  "CurlyVector" , "WindBarb"   
@@ -48,5 +49,5 @@ begin
   res@vcRefAnnoString2          = "10 m/s"  
   res@vcMinDistanceF            = 0.02
 
-  plot  = gsn_csm_vector_map_polar(wks,u,v,res)
+  plot  = gsn_csm_vector_map(wks,u,v,res)
 end

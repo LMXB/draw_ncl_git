@@ -3,12 +3,12 @@ begin
   ;case_name="HEAT_F"
   g_font = 0.025
   l_thick= 2
-  do i=0,3,1
+  do i=3,3,1
   ;outfile="/home/ys17-19/cjx/figure/HEAT_MC_figure/global_PTENDT_"+level(i)+"_ttest"
   outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/global_PTENDT_"+level(i)+"_ttest"
   ;HEAT_file="/home/ys17-19/cjx/all_output_data/HEAT_MC_output/HEAT_MC.cam.h0.250-289.nc"
   HEAT_file="/home/ys17-19/cjx/all_output_data/"+case_name+"_output/"+case_name+".cam.h0.250-289.nc"
-  CTRL_file="/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc"
+  ;CTRL_file="/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc"
   fin_heat = addfile(HEAT_file,"r")
   fin_ctrl = addfile(CTRL_file,"r")
   pre_heat = fin_heat->PTENDT(120:479:1,{level(i)},:,:)
@@ -18,9 +18,10 @@ begin
   pre_diff_ssn = pre_heat_ssn
   pre_diff_ssn = (pre_heat_ssn - pre_ctrl_ssn)
       var  = dim_avg_n_Wrap(pre_diff_ssn,0)
+  print(var({lat| -1:1},{lon| 110:120}))
 
   ;ttest
-  GW_file="/home/ys17-19/cjx/CTRL_data/B2000_raw_data/B2000_f19g16_CP_CTRL.cam.h0.0252-02.nc"
+  ;GW_file="/home/ys17-19/cjx/CTRL_data/B2000_raw_data/B2000_f19g16_CP_CTRL.cam.h0.0252-02.nc"
   GW_IN=addfile(GW_file,"r")
   gw=GW_IN->gw
   siglvl = 0.05

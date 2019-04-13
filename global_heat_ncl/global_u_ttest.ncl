@@ -5,22 +5,22 @@ begin
   l_thick= 2
   do i=3,3,1
   ;outfile="/home/ys17-19/cjx/figure/HEAT_MC_figure/global_U_"+level(i)+"_ttest"
-  outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/global_U_"+level(i)+"_ttest"
+  outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/"+season+" global_U_"+level(i)+"_ttest"
   ;HEAT_file="/home/ys17-19/cjx/all_output_data/HEAT_MC_output/HEAT_MC.cam.h0.250-289.nc"
   HEAT_file="/home/ys17-19/cjx/all_output_data/"+case_name+"_output/"+case_name+".cam.h0.250-289.nc"
-  CTRL_file="/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc"
+  ;CTRL_file="/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc"
   fin_heat = addfile(HEAT_file,"r")
   fin_ctrl = addfile(CTRL_file,"r")
   pre_heat = fin_heat->U(120:479:1,{level(i)},:,:)
   pre_ctrl = fin_ctrl->U(120:479:1,{level(i)},:,:)
-  pre_heat_ssn = month_to_season(pre_heat,"MAM")
-  pre_ctrl_ssn = month_to_season(pre_ctrl,"MAM")
+  pre_heat_ssn = month_to_season(pre_heat,season)
+  pre_ctrl_ssn = month_to_season(pre_ctrl,season)
   pre_diff_ssn = pre_heat_ssn
   pre_diff_ssn = (pre_heat_ssn - pre_ctrl_ssn)
       var  = dim_avg_n_Wrap(pre_diff_ssn,0)
 
   ;ttest
-  GW_file="/home/ys17-19/cjx/CTRL_data/B2000_raw_data/B2000_f19g16_CP_CTRL.cam.h0.0252-02.nc"
+  ;GW_file="/home/ys17-19/cjx/CTRL_data/B2000_raw_data/B2000_f19g16_CP_CTRL.cam.h0.0252-02.nc"
   GW_IN=addfile(GW_file,"r")
   gw=GW_IN->gw
   siglvl = 0.05
@@ -54,7 +54,7 @@ begin
   res@gsnMaximize      = True       ; fill up the page
   res@gsnLeftString   = ""                   
   res@gsnRightString  = ""                 
-  res@gsnCenterString = "U"+level(i)+" Diff "
+  res@gsnCenterString = season+" U"+level(i)+" Diff "
   res@mpCenterLonF = 180.
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@mpFillOn               = False
@@ -67,7 +67,7 @@ begin
 ;  res@cnLevels      =(/-400, -300,-1000,-100, 0, 100 ,400,800, 11000,1600,10000 /)
  ; res@cnFillColors =(/10,26,42,58,74,90,106,122,138,154,170,186,202,218,234,250/)
   ;res@cnFillColors =(/218, 202, 186, 170, 138, 122, 90, 74, 58, 42/)
-  res@cnFillColors =(/ 58, 74, 90, 122, 138, 170, 186, 202/)
+  res@cnFillColors =(/ 58, 74, 90, 96, 144, 170, 186, 202/)
   res@cnMinLevelValF        = -3         ; set min contour level
   res@cnMaxLevelValF        = 3         ; set max contour level
   res@cnLevelSpacingF       = 1          ; set contour interval

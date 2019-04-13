@@ -11,8 +11,7 @@ begin
  
 
     outfile="/home/ys17-19/cjx/figure/ctrl_figure/Antartic_temp_ctrl"
-    CTRL_file="/home/ys17-19/cjx/output_data/CTRL.cam.h0.1-65.TS.nc"
-    fin_ctrl = addfile(CTRL_file,"r")
+    fin_ctrl = addfile("/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc","r")
     g_font=0.02
  
 ;;; get variables: temperature, longitude, latitude
@@ -28,7 +27,7 @@ begin
 ;;;;
  
  
-    wks = gsn_open_wks("png",outfile)                 ; open wk station
+    wks = gsn_open_wks("x11",outfile)                 ; open wk station
     gsn_define_colormap(wks,"sunshine_9lev")
 
     res                        = True         ; mods desired  
@@ -66,8 +65,8 @@ begin
     res@mpGeophysicalLineThicknessF = 2
     res@mpGeophysicalLineColor      = "black";"white" 
     ;res@mpFillDrawOrder="PostDraw"
-    res@gsnPolar              = "SH"    
-    res@mpMaxLatF            = -45
+    ;res@gsnPolar              = "SH"    
+    ;res@mpMaxLatF            = -45
     ;res@mpCenterLonF = 180.
     ;res@mpMaxLatF  = g_latN
     ;res@mpMinLatF  = g_latS
@@ -113,7 +112,7 @@ begin
     ;polyres@gsMarkerThicknessF     = 6.          ; polymarker size
     ;polyres@gsMarkerColor     = "black"          ; polymarker size
 
-    plot = gsn_csm_contour_map_polar(wks,PREC,res) ; create a default plot
+    plot = gsn_csm_contour_map(wks,PREC,res) ; create a default plot
     draw(plot)
     frame(wks)
 end
