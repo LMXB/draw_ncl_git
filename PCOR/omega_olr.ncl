@@ -14,7 +14,7 @@ begin
   ;Define parameters
     g_data_path = "/home/ys17-19/cjx/observation_data/sst/HadISST_monthly_197901_201812.nc"
     g_data_path4="/home/ys17-19/cjx/observation_data/olr.mon.mean.nc"
-    g_data_path5="/home/ys17-19/cjx/observation_data/ERA-Interim/era_interim_z.nc"
+    g_data_path5="/home/ys17-19/cjx/observation_data/omega.mon.mean.nc"
     level=(/200,500,850/)
     l_thick= 2
     range=6
@@ -36,7 +36,7 @@ begin
     g_lst_mon = 201812
 
     do j=0,2,1
-    outfile    =   "/home/ys17-19/cjx/figure/PCOR_new/z"+level(j)+"_olr"
+    outfile    =   "/home/ys17-19/cjx/figure/PCOR_new/omega"+level(j)+"_olr"
 
 ;*************************For F_Compset Ctrl***********************************
 
@@ -64,7 +64,7 @@ begin
     ilast_olr   = ind(yyyymm_olr .eq. g_lst_mon)
 	var1 :=ctrl_in1->sst(istrt:ilast,:,:)			; p for unify the var name
 	var4  =ctrl_in4->olr(istrt_olr:ilast_olr,:,:)			; p for unify the var name
-	var5  =ctrl_in5->z(istrt_var:ilast_var,{level(j)},:,:)			; p for unify the var name
+	var5  =ctrl_in5->omega(istrt_var:ilast_var,{level(j)},:,:)			; p for unify the var name
 
 ;-----count nino3---------------------------------------------------
     var1_temp=var1
@@ -91,7 +91,7 @@ begin
 ;-------------------------------------------------------------------
  
     delete(var1)
-    var1 =short2flt(var5)
+    var1 =var5
     pr12_3=var1(0,:,:)
     pr12_3sig=var1(0,:,:)
     psig = 0.05
@@ -105,8 +105,8 @@ begin
         
         var1_ssn:=month_to_season(var1,"MAM")
         
-        r12=escorc(olr,var1_ssn(latitude|:,longitude|:,time|:))
-        r13=escorc(nino3,var1_ssn(latitude|:,longitude|:,time|:))
+        r12=escorc(olr,var1_ssn(lat|:,lon|:,time|:))
+        r13=escorc(nino3,var1_ssn(lat|:,lon|:,time|:))
         pr12_3=(/(r12-r13*r23)/(sqrt(1-r13*r13)*sqrt(1-r23*r23))/)
 
         ; significance test
@@ -136,7 +136,7 @@ begin
   res@gsnLeftString   = ""                   
   res@gsnRightString  = ""                 
   ;res@gsnCenterString  = ""                 
-  res@gsnCenterString = "PCOR Z"+level(j)+" &olr -nino3 "
+  res@gsnCenterString = "PCOR omega"+level(j)+" &olr -nino3 "
   res@mpCenterLonF = 180.
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@mpFillOn               = False

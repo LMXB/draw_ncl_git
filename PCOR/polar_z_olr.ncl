@@ -36,7 +36,7 @@ begin
     g_lst_mon = 201812
 
     do j=0,2,1
-    outfile    =   "/home/ys17-19/cjx/figure/PCOR_new/z"+level(j)+"_olr"
+    outfile    =   "/home/ys17-19/cjx/figure/PCOR_test/ERA_interim_z1979"+level(j)+"_olr"
 
 ;*************************For F_Compset Ctrl***********************************
 
@@ -136,8 +136,10 @@ begin
   res@gsnLeftString   = ""                   
   res@gsnRightString  = ""                 
   ;res@gsnCenterString  = ""                 
-  res@gsnCenterString = "PCOR Z"+level(j)+" &olr -nino3 "
-  res@mpCenterLonF = 180.
+  res@gsnCenterString = "PCOR ERA_interim (1979)Z"+level(j)+" &olr -nino3 "
+  res@mpCenterLonF = 280.
+  res@gsnPolar     = "SH"
+  res@mpMaxLatF    = -45
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@mpFillOn               = False
    res@mpGeophysicalLineThicknessF = l_thick

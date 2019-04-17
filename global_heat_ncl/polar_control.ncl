@@ -11,11 +11,13 @@ begin
     g_font = 0.025    
     l_thick= 2
 
+    CTRL_file="/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc"
+    GW_file="/home/ys17-19/cjx/CTRL_data/B2000_raw_data/B2000_f19g16_CP_CTRL.cam.h0.0252-02.nc"
     do j=0,0,1
         case_name=case_name_list(j)
         print(case_name)
-        load "polar_height_ttest.ncl"
-        ;load "SH_polar_height_ttest.ncl"
+        ;load "polar_height_ttest.ncl"
+        load "SH_polar_height_ttest.ncl"
        ; load "polar_ts_ttest.ncl"
     end do
 end
