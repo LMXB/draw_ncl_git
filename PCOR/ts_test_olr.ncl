@@ -14,8 +14,8 @@ begin
   ;Define parameters
     g_data_path = "/home/ys17-19/cjx/observation_data/sst/HadISST_monthly_197901_201812.nc"
     g_data_path4="/home/ys17-19/cjx/observation_data/olr.mon.mean.nc"
-    g_data_path5="/home/ys17-19/cjx/observation_data/ERA-Interim/era_interim_z.nc"
-    level=(/200,500,850/)
+    g_data_path5="/home/ys17-19/cjx/observation_data/air.mon.mean.nc"
+    
     l_thick= 2
     range=6
     ;Fig region
@@ -25,18 +25,40 @@ begin
     g_figlonW=300
 
     ;Nino 3
-    g_latS=-5.
-    g_latN=5.
-    g_lonW=190.
-    g_lonE=240.
+    ;g_latS=-5.
+    ;g_latN=5.
+    ;g_lonW=190.
+    ;g_lonE=240.
 
     
+    ; Central
+    g_clatS=-10.
+    g_clatN=10.
+    g_clonW=165.
+    g_clonE=220.
+    
+    ; Eastern
+    g_elatS=-15.
+    g_elatN=5.
+    g_elonW=250.
+    g_elonE=290.
+    
+    
+    ; Western 
+    g_wlatS=-10.
+    g_wlatN=20.
+    g_wlonW=125.
+    g_wlonE=145.
     g_font = 0.018
-    g_strt_mon = 197901 
-    g_lst_mon = 201812
 
-    do j=1,1,1
-    outfile    =   "/home/ys17-19/cjx/figure/PCOR_new/z"+level(j)+"_olr"
+    ;Nino 3
+    g_latS=-5.
+    g_latN=5.
+    g_lonW=210.
+    g_lonE=270.
+    g_strt_mon = 197901 
+    g_lst_mon = 201712;201812
+    outfile    = "/home/ys17-19/cjx/figure/PCOR_new/ts_olr"
 
 ;*************************For F_Compset Ctrl***********************************
 
@@ -62,9 +84,9 @@ begin
     istrt_var   = ind(yyyymm_var .eq. g_strt_mon)
     ilast_var   = ind(yyyymm_var .eq. g_lst_mon)
     ilast_olr   = ind(yyyymm_olr .eq. g_lst_mon)
-	var1 :=ctrl_in1->sst(istrt:ilast,:,:)			; p for unify the var name
+	var1  =ctrl_in1->sst(istrt:ilast,:,:)			; p for unify the var name
 	var4  =ctrl_in4->olr(istrt_olr:ilast_olr,:,:)			; p for unify the var name
-	var5  =ctrl_in5->z(istrt_var:ilast_var,{level(j)},:,:)			; p for unify the var name
+	var5  =ctrl_in5->air(istrt_var:ilast_var,:,:)			; p for unify the var name
 
 ;-----count nino3---------------------------------------------------
     var1_temp=var1
@@ -75,6 +97,12 @@ begin
     var1_djf=month_to_season(var1,"DJF")
     nino3=wgt_areaave_Wrap(var1_djf(:,{g_latS:g_latN},{g_lonW:g_lonE}), 1.0, 1.0, 0)
     printVarSummary(nino3)
+    w_p=wgt_areaave_Wrap(var1_djf(:,{g_wlatS:g_wlatN},{g_wlonW:g_wlonE}), 1.0, 1.0, 0)
+    c_p=wgt_areaave_Wrap(var1_djf(:,{g_clatS:g_clatN},{g_clonW:g_clonE}), 1.0, 1.0, 0)
+    e_p=wgt_areaave_Wrap(var1_djf(:,{g_elatS:g_elatN},{g_elonW:g_elonE}), 1.0, 1.0, 0)
+
+    emi=w_p
+    emi=c_p-0.5*e_p-0.5*w_p
 
 ;----count olr in MC----------------------------------------------------
 	olr_in  =short2flt(var4)			; p for unify the var name
@@ -90,24 +118,25 @@ begin
    ;change    emi     --- 3      nino3-3
 ;-------------------------------------------------------------------
  
-    delete(var1)
-    var1 =short2flt(var5)
+    ;delete(var1)
+    ;var1 =var5
     pr12_3=var1(0,:,:)
     pr12_3sig=var1(0,:,:)
     psig = 0.05
 
-    r23_temp=escorc(olr,nino3)
+    r23_temp=escorc(emi,nino3)
     r23=pr12_3
     r23=(/r23_temp/)
-
+    printVarSummary(r23)
     years=dimsizes(nino3)
 
         
-        var1_ssn:=month_to_season(var1,"MAM")        
-        r12=escorc(olr,var1_ssn(latitude|:,longitude|:,time|:))
-        r13=escorc(nino3,var1_ssn(latitude|:,longitude|:,time|:))
+        var1_ssn:=month_to_season(var1,"MAM")
+        r12=escorc(nino3,var1_ssn(latitude|:,longitude|:,time|:)) 
+        r13=escorc(emi,var1_ssn(latitude|:,longitude|:,time|:))
+        ;r12=escorc(olr,var1_ssn(lat|:,lon|:,time|:))
+        ;r13=escorc(nino3,var1_ssn(lat|:,lon|:,time|:))
         pr12_3=(/(r12-r13*r23)/(sqrt(1-r13*r13)*sqrt(1-r23*r23))/)
-
         ; significance test
         n = years
         df= n-1-2
@@ -134,8 +163,8 @@ begin
   res@gsnMaximize      = True       ; fill up the page
   res@gsnLeftString   = ""                   
   res@gsnRightString  = ""                 
-  ;res@gsnCenterString  = ""                 
-  res@gsnCenterString = "PCOR Z"+level(j)+" &olr -nino3 "
+  res@gsnCenterString  = ""                 
+  res@gsnCenterString = " PCOR TS&olr -nino3 "
   res@mpCenterLonF = 180.
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@mpFillOn               = False
@@ -199,6 +228,7 @@ begin
   overlay(plot1,plot2)
   draw(plot1)
   frame(wks)
-  end do
-
+system("rm -rf pr12_3.nc")
+fout = addfile("pr12_3.nc","c")
+fout->pr12_3=pr12_3
 end 

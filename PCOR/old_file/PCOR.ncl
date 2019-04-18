@@ -25,12 +25,30 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 
 begin
 
-lon_array=(/10.0, 115.0, 140.0, 155.0, 231.0,  284.0, 310.0/)
-lat_array=(/0.0,  0.0,   -5.0,  5.0,   5.0,    0.0,   0.0/)
-range =10
+range =6
 g_font = 0.025
 l_thick= 2
 
+    ; Central
+    g_clatS=-10.
+    g_clatN=10.
+    g_clonW=165.
+    g_clonE=220.
+    
+    ; Eastern
+    g_elatS=-15.
+    g_elatN=5.
+    g_elonW=250.
+    g_elonE=290.
+    
+    
+    ; Western 
+    g_wlatS=-10.
+    g_wlatN=20.
+    g_wlonW=125.
+    g_wlonE=145.
+    
+    
 
 ;================================================
 ;Variables List:
@@ -41,14 +59,14 @@ l_thick= 2
 ;global variables
     ;Define parameters
     g_data_path = "/home/ys17-19/cjx/observation_data/sst/HadISST_monthly_197901_201812.nc"
-    g_data_path2="/home/ys17-19/cjx/observation_data/gpcp_v02r03_monthly_197901_201901.nc"
+    g_data_path2="/home/ys17-19/cjx/observation_data/olr.mon.mean.nc"
     g_data_path3="/home/ys17-19/cjx/observation_data/ERA-Interim/era_interim_z.nc"
 
     ;Fig region
-    g_figlatS=-70
-    g_figlatN=70
-    g_figlonE=90
-    g_figlonW=280
+    g_figlatS=-30
+    g_figlatN=50
+    g_figlonE=30
+    g_figlonW=200
 
     ;Nino 3
     g_latS=-5.
@@ -59,12 +77,12 @@ l_thick= 2
 ; create an array of desired pressure levels:
 
         
-do i=1,1,1
+;do i=1,1,1
     g_font = 0.018
     g_season = "MAM"
     g_strt_mon = 197901 
     g_lst_mon = 201812
-    g_fig_name    =   "/home/ys17-19/cjx/figure/PCOR/PCOR precip in area (lon="+lon_array(i)+", lat="+lat_array(i)+")&z500 -nino3"
+    g_fig_name    =   "/home/ys17-19/cjx/figure/PCOR/PCOR precip in area&z500 -nino3"
    ; g_fig_title     = " PCOR ("+(/"JJA", "SON", "DJF", "MAM1", "JJA1"/)+" SSTA & Wind850, DJF Nino3)"
 
 
@@ -93,15 +111,13 @@ do i=1,1,1
     istrt_z500   = ind(yyyymm_z500 .eq. g_strt_mon)
     ilast_z500   = ind(yyyymm_z500 .eq. g_lst_mon)
 	var1  =ctrl_in1->sst(istrt:ilast,:,:)			; p for unify the var name
-	precc  =ctrl_in2->precip(istrt_prec:ilast_prec,:,:)			; p for unify the var name
-   ; pre_precc =precc(time|:,{latitude | -10:10},{longitude | 105:125})
-    pre_precc =precc(time|:,{latitude | lat_array(i)-range:lat_array(i)+range},{longitude | lon_array(i)-range:lon_array(i)+range})
-    pre_precc_c=pre_precc
-    pre_precc_c=pre_precc/24.0
-    pre_precc_ssn = month_to_season(pre_precc_c,"MAM")
-    printVarSummary(pre_precc_ssn)
-    precip = wgt_areaave(pre_precc_ssn,1.0,1.0,0)
-    printVarSummary(precip)
+	;precc  =short2flt(ctrl_in2->olr(istrt_prec:ilast_prec,:,:))			; p for unify the var name
+   ;; pre_precc =precc(time|:,{latitude | -10:10},{longitude | 105:125})
+    ;pre_precc =precc(time|:,{lat | 0-range:0+range},{lon | 115-range:115+range})
+    ;pre_precc_ssn = month_to_season(pre_precc,"MAM")
+    ;printVarSummary(pre_precc_ssn)
+    ;olr = wgt_areaave(pre_precc_ssn,1.0,1.0,0)
+    ;printVarSummary(olr)
     var1_temp=var1
     var1(:,:,{-179.5:-0.5})=(/var1(:,:,{0.5:179.5})/)
     var1(:,:,{0.5:179.5})=(/var1_temp(:,:,{-179.5:-0.5})/)
@@ -111,6 +127,12 @@ do i=1,1,1
     var1_djf=month_to_season(var1,"DJF")
     nino3=wgt_areaave_Wrap(var1_djf(:,{g_latS:g_latN},{g_lonW:g_lonE}), 1.0, 1.0, 0)
   
+    w_p=wgt_areaave_Wrap(var1_djf(:,{g_wlatS:g_wlatN},{g_wlonW:g_wlonE}), 1.0, 1.0, 0)
+    c_p=wgt_areaave_Wrap(var1_djf(:,{g_clatS:g_clatN},{g_clonW:g_clonE}), 1.0, 1.0, 0)
+    e_p=wgt_areaave_Wrap(var1_djf(:,{g_elatS:g_elatN},{g_elonW:g_elonE}), 1.0, 1.0, 0)
+
+    emi=w_p
+    emi=c_p-0.5*e_p-0.5*w_p
 
 ;----------------------------------------------
 ;change    ;   sst     --- 1   to  z500   ----1
@@ -118,12 +140,11 @@ do i=1,1,1
            ;   emi     --- 3       nino3  ----3
 ;----------------------------------------------
 
-    delete(var1)  
-	var1  =short2flt(ctrl_in3->z(istrt_prec:ilast_prec,{500},:,:))			; p for unify the var name
-
+    ;delete(var1)  
+	;var1  =short2flt(ctrl_in3->z(istrt_z500:ilast_z500,{500},:,:))			; p for unify the var name
     pr12_3=var1(0,:,:)
     psig = 0.05
-    r23_temp=escorc(precip,nino3)
+    r23_temp=escorc(emi,nino3)
     printVarSummary(r23_temp)
     r23=pr12_3
     printVarSummary(r23)
@@ -133,16 +154,12 @@ do i=1,1,1
 
     ; JJA SON
    ; do ii = 0, 1
-        var1_ssntemp=month_to_season(var1,g_season)
-        var1_ssn:=var1_ssntemp(latitude|:,longitude|:,time|:)
-        var1_ssn:=var1_ssn(:,:,0:years-2)
-
-        r12=escorc(precip(1:),var1_ssn)
-        r13=escorc(nino3(1:),var1_ssn)
+        var1_ssn:=month_to_season(var1,"MAM")        
+        r12=escorc(nino3,var1_ssn(latitude|:,longitude|:,time|:))
+        r13=escorc(emi,var1_ssn(latitude|:,longitude|:,time|:))
         pr12_3=(/(r12-r13*r23)/(sqrt(1-r13*r13)*sqrt(1-r23*r23))/)
-       ; print(pr12_3)
         ; significance test
-        n = years-1 
+        n = years 
         df= n-1-2
         t=pr12_3*sqrt(df)/sqrt(1-pr12_3*pr12_3)
         p=student_t(t,df)
@@ -153,45 +170,84 @@ do i=1,1,1
 ; Mission 3. Set plot parameters and plot
 ; ==============================================================
 
-wks = gsn_open_wks("png",g_fig_name)  ; open a ps file
-gsn_define_colormap(wks,"BlueWhiteOrangeRed")
+wks = gsn_open_wks("x11",g_fig_name)  ; open a ps file
+;gsn_define_colormap(wks,"BlueWhiteOrangeRed")
+ gsn_define_colormap(wks,"temp_diff_18lev")
 
 
 ;-----------------------------------------------------------------------------
-res=True
-res@gsnDraw         = False
-res@gsnFrame        = False
-res@gsnLeftString   = " "                   
-res@gsnRightString  = " "                 
-res@gsnCenterString = "PCOR precip in area (lon="+lon_array(i)+", lat="+lat_array(i)+")&Z500 -nino3"
-res@cnLineThicknessF =3.
-res@cnLinesOn            = False
-res@cnFillOn             = True
-res@cnLevelSelectionMode = "ExplicitLevels"
-res@cnFillColors =(/2,17,33,49,113,129,193,209,225,241/)
-;res@cnMinLevelValF        = -0.4         ; set min contour level
-;res@cnMaxLevelValF        = 0.4         ; set max contour level
-;res@cnLevelSpacingF       = 0.1          ; set contour interval
-res@cnLevels =(/-0.45,-0.4,-0.35,-0.3,0,0.3,0.35,0.4,0.45/)
-res@mpFillOn=False
-res@mpCenterLonF =180
-res@lbLabelFontHeightF = g_font
-res@tmYLMajorLengthF=0.01
-res@tmXBMajorLengthF=0.01
-res@tmXBLabelFontHeightF = g_font
-res@tmYLLabelFontHeightF = g_font
-res@tmXBTickSpacingF =60
-res@tmYLTickSpacingF =30
-res@pmLabelBarOrthogonalPosF = 0.15
-res@mpGeophysicalLineThicknessF =l_thick
 
+    plot1 = new(1,"graphic")
+    plot2 = new(1,"graphic")
+  res                  = True       ; use plot options
+
+  res@cnFillOn             = True               ; turn on color for contours
+  res@cnLinesOn            = False              ; turn off contour lines
+  res@cnLineLabelsOn       = False              ; turn off contour line labels
+
+
+
+ ; i = NhlNewColor(wks,0.341,0.,0.533)              ; add gray to colormap
+ ; j = NhlNewColor(wks,1,0.,0.)
+;  res@mpLandFillColor       = "gray"            ; set land to be gray
+
+  res@cnLevelSelectionMode = "ExplicitLevels"   ; set manual contour levels
+  res@cnLevels = (/-0.45,-0.35,0.35,0.45/)
+;   res@cnLevels = ispan(0,60,10)
+;  res@cnFillColors =(/-1,20,47,57,94,127,152/)
+;    res@cnLevelSelectionMode = "ExplicitLevels"   ; set manual contour levels
+;    res@cnLevels =    (/-0.8,-0.4,-0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.5, 2.0, 2.5, 3.0/)
+;    res@cnFillColors =(/   2,  18,  34,  52,  61,  68,  77,  82,  87,  91,  95,  99, 100, 102/)
+
+; res@cnLevelSelectionMode  = "ManualLevels" ; set manual contour levels
+; res@cnMinLevelValF        = -1.          ; set min contour level
+; res@cnMaxLevelValF        = 1.          ; set max contour level
+; res@cnLevelSpacingF       = 0.05         ; set contour interval
+
+  res@cnFillColors =(/5,8,10,12,15/)
+
+
+  res@gsnFrame         = False
+  res@gsnDraw  = False
+  
+  res@gsnSpreadColors      = True               ; use full color map
+;  res@gsnSpreadColorStart  = 2               ; start at color 17
+;  res@gsnSpreadColorEnd    = 14                ; end at color 200
+
+;  res@gsnPanelLabelBar    = True   ;Turn on panel labelbar
+  res@gsnStringFontHeightF = g_font
+
+  res@gsnMaximize      = True       ; fill up the page
+  res@gsnAddCyclic   = True;False
+  res@gsnPaperOrientation = "portrait"
+  res@gsnContourZeroLineThicknessF = 2.  ;set thickness of zero
+
+
+  res@lbLabelBarOn = False   ; turn off the label bar
+  res@lbOrientation          = "horizontal"
+  res@lbLabelFontHeightF  = g_font              ; make labels smaller
+  ;res@lbLabelStride = 1
+
+  res@mpFillOn   = False     ; turn off gray continents
+  res@mpGeophysicalLineThicknessF = 2
+  res@mpGeophysicalLineColor      = "black";"white" 
+  res@mpFillDrawOrder="PostDraw"
+  res@mpCenterLonF = 180.
   res@mpMaxLatF  = g_figlatN
   res@mpMinLatF  = g_figlatS
   res@mpMaxLonF  = g_figlonW
   res@mpMinLonF  = g_figlonE
 
-    plot1 = new(1,"graphic")
-    plot2 = new(1,"graphic")
+  res@tmYLMajorLengthF=0.01
+  res@tmXBMajorLengthF=0.01
+  res@tmYROn = False
+  res@tmXTOn = False
+  res@tmYLTickSpacingF=10
+  res@tmYLMinorOn = False
+  res@tmXBMinorOn = False
+  res@tmXBLabelFontHeightF = g_font
+  res@tmYLLabelFontHeightF = g_font
+
   res4                  = True       ; use plot options
   res4@cnFillOn         = True       ; Fill contours
   res4@cnLinesOn        = False;True      ; turn off contour lines
@@ -219,10 +275,13 @@ res@mpGeophysicalLineThicknessF =l_thick
   polyres@gsMarkerSizeF     = 16.          ; polymarker size
   polyres@gsMarkerThicknessF     = 6.          ; polymarker size
   polyres@gsMarkerColor     = "green"          ; polymarker size
-  plot1@$unique_string("fxxk ncl")$    = gsn_add_polymarker(wks,plot1,lon_array(i),lat_array(i),polyres)
+  plot1@$unique_string("fxxk ncl")$    = gsn_add_polymarker(wks,plot1,115,0,polyres)
   overlay(plot1,plot2)
   draw(plot1)
   frame(wks)
   delete(var1)
-end do
+;end do
+system("rm -rf pr12_3.nc")
+fout = addfile("pr12_3.nc","c")
+fout->pr12_3=pr12_3
 end 

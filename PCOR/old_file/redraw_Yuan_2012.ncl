@@ -133,6 +133,7 @@ begin
     r23_temp=escorc(emi,nino3)
     r23=pr12_3(0,:,:)
     r23=(/r23_temp/)
+    printVarSummary(r23)
 
     r23_uv=pr12_3_u(0,:,:)
     r23_uv=(/r23_temp/)
