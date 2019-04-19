@@ -112,7 +112,8 @@ begin
         n = years
         df= n-1-2
         t=pr12_3*sqrt(df)/sqrt(1-pr12_3*pr12_3)
-       
+        print(df)
+
         p=student_t(t,df)
         pr12_3sig=where(p .le. psig, pr12_3, pr12_3@_FillValue)
 

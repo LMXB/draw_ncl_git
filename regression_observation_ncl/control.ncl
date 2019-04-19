@@ -13,8 +13,9 @@ begin
         print(lon_array(i))
         ;load "regression_precip.ncl"
         ;load "regression_precip_z500.ncl"
+        load "regression_test.ncl"
         ;load "regression_uwnd200.ncl"
-        load "olr_wind.ncl"
+        ;load "olr_wind.ncl"
         ;load "regression_wind200.ncl"
     end do
 end

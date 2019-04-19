@@ -56,8 +56,8 @@ begin
     g_latN=5.
     g_lonW=210.
     g_lonE=270.
-    g_strt_mon = 197912;197901 
-    g_lst_mon = 201611;201812
+    g_strt_mon = 197901;197912;197901 
+    g_lst_mon = 201812;201611;201812
     outfile    = "/home/ys17-19/cjx/figure/PCOR_new/ts_olr"
 
 ;*************************For F_Compset Ctrl***********************************
@@ -94,13 +94,19 @@ begin
     var1(:,:,{0.5:179.5})=(/var1_temp(:,:,{-179.5:-0.5})/)
     delete(var1_temp)
     var1&longitude=fspan(0.5,359.5,360)
-    var1_djf=month_to_season(var1,"JFM")
+    var1_djf=month_to_season(var1,"DJF")
     nino3=wgt_areaave_Wrap(var1_djf(:,{g_latS:g_latN},{g_lonW:g_lonE}), 1.0, 1.0, 0)
     printVarSummary(nino3)
 
-    nino= asciiread("nino.txt",-1,"float")
-    ;printVarSummary(nino)
-    print(nino)
-    r= escorc(nino(1:),nino3)
-    print(r)
+    system("rm -rf nino3.nc")
+    f = addfile("nino3.nc","c")
+    f->nino3 = nino3
+
+    ;f=addfile("/home/ys17-19/cjx/draw_ncl/sample_ncl/script-upload/data/ENSO-index.nc","r")
+    ;nino=f->ensoi
+    ;;nino= asciiread("nino.txt",-1,"float")
+    ;;;printVarSummary(nino)
+    ;print(nino)
+    ;r= escorc(nino,nino3(:34))
+    ;print(r)
     end
