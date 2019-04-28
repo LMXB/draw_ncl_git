@@ -26,8 +26,9 @@ begin
         ;load "global_precc_ttest.ncl"
         ;load "global_omega_ttest.ncl"
         ;load "global_temp_ttest.ncl"
-        load "global_wind_ttest.ncl"
+        ;load "global_wind_ttest.ncl"
         ;load "global_u_ttest.ncl"
         ;load "global_div_ttest.ncl"
+        load "standardized_global_precc_ttest.ncl"
     end do
 end

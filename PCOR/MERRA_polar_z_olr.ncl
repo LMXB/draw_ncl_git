@@ -14,7 +14,7 @@ begin
   ;Define parameters
     g_data_path = "/home/ys17-19/cjx/observation_data/sst/HadISST_monthly_197901_201812.nc"
     g_data_path4="/home/ys17-19/cjx/observation_data/olr.mon.mean.nc"
-    g_data_path5="/home/ys17-19/cjx/observation_data/ERA-Interim/era_interim_z.nc"
+    g_data_path5="/home/ys17-19/cjx/observation_data/MERRA/MERRA_z.nc.nc"
     level=(/200,500,850/)
     l_thick= 2
     range=6
@@ -32,11 +32,11 @@ begin
 
     
     g_font = 0.018
-    g_strt_mon = 199001 
-    g_lst_mon = 201812
+    g_strt_mon = 197901 
+    g_lst_mon = 201512
 
     do j=0,2,1
-    outfile    =   "/home/ys17-19/cjx/figure/correlation_test/ERA_interim_z"+level(j)+"_(1990)_olr"
+    outfile    =   "/home/ys17-19/cjx/figure/correlation_test/MERRA_z"+level(j)+"_(1979)_olr"
 
 ;*************************For F_Compset Ctrl***********************************
 
@@ -52,7 +52,7 @@ begin
 	ctrl_in5     = addfile (ctrl_file5, "r")   ; note the "s" of addfile
 	time_hist    = ctrl_in1->time
     time_olr     = ctrl_in4->time
-    time_var     = ctrl_in5->time
+    time_var     = ctrl_in5->TIME
     yyyymm  = cd_calendar(time_hist,-1)
     yyyymm_olr  = cd_calendar(time_olr,-1)
     yyyymm_var  = cd_calendar(time_var,-1)
@@ -105,8 +105,8 @@ begin
         
         var1_ssn:=month_to_season(var1,"MAM")
         r12=var1_ssn(0,:,:)     
-        r12=escorc(olr,var1_ssn(latitude|:,longitude|:,time|:))
-        r13=escorc(nino3,var1_ssn(latitude|:,longitude|:,time|:))
+        r12=escorc(olr,var1_ssn(YDim|:,XDim|:,TIME|:))
+        r13=escorc(nino3,var1_ssn(YDim|:,XDim|:,TIME|:))
         pr12_3=(/(r12-r13*r23)/(sqrt(1-r13*r13)*sqrt(1-r23*r23))/)
 
         ; significance test
@@ -136,7 +136,7 @@ begin
   res@gsnLeftString   = ""                   
   res@gsnRightString  = ""                 
   ;res@gsnCenterString  = ""                 
-  res@gsnCenterString = "COR ERA_interim (1990)Z"+level(j)+" &olr "
+  res@gsnCenterString = "COR MERRA (1979)Z"+level(j)+" &olr "
   res@mpCenterLonF = 280.
   res@gsnPolar     = "SH"
   res@mpMaxLatF    = -45
