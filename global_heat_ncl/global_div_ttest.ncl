@@ -1,7 +1,7 @@
 begin
 ;case_name="HEAT_MC"
   level=(/1000,850,500,200/)
-  do i=0,3,1
+  do i=1,1,1
   ;outfile="/home/ys17-19/cjx/figure/heat_test_figure/global_wind_"+level(i)+"_ttest"
   outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/"+season+" global_div_"+level(i)+"_ttest"
   ;HEAT_file="/home/ys17-19/cjx/all_output_data/HEAT_MC_output/HEAT_MC.cam.h0.250-289.nc"
@@ -53,9 +53,9 @@ begin
   res@gsnAddCyclic    =True
   res@cnLevelSelectionMode  = "ManualLevels" ; set manual contour levels
   res@cnFillColors =(/ 58, 74, 90, 96, 144, 170, 186, 202/)
-  res@cnMinLevelValF        = -0.000006         ; set min contour level
-  res@cnMaxLevelValF        = 0.000006         ; set max contour level
-  res@cnLevelSpacingF       = 0.000002          ; set contour interval
+  res@cnMinLevelValF        = -0.0000003         ; set min contour level
+  res@cnMaxLevelValF        = 0.0000003         ; set max contour level
+  res@cnLevelSpacingF       = 0.0000001          ; set contour interval
   res@cnFillOn      = True                  
   res@cnLinesOn     = False                 
 ;  res@gsnCenterStringFontHeightF = g_font  

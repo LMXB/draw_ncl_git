@@ -116,7 +116,7 @@ begin
   polyres@gsMarkerThicknessF     = 6.          ; polymarker size
   polyres@gsMarkerColor     = "green"          ; polymarker size
   plot1@$unique_string("fxxk ncl")$    = gsn_add_polymarker(wks,plot1,lon_array(j),lat_array(j),polyres)
-  ;overlay(plot1,plot2)
+  overlay(plot1,plot2)
   draw(plot1)
   frame(wks)
   end do
