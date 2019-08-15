@@ -36,7 +36,7 @@ begin
     l_thick= 2
     g_strt_mon = 197901 
     g_lst_mon = 201812
-    do j=0,3,1
+    do j=0,0,1
     outfile="/home/ys17-19/cjx/figure/PCOR_new/wind"+level(j)+"_olr"
 ;*************************For F_Compset Ctrl***********************************
 
@@ -98,7 +98,7 @@ begin
     pr12_3_usig=var2(0,:,:)
     pr12_3_vsig=var3(0,:,:)
     pr12_3_v=var3(0,:,:)
-    psig = 0.05
+    psig = 0.1
 
     r23_temp=escorc(olr,nino3)
     r23=pr12_3
@@ -170,7 +170,7 @@ begin
 
   res@vcFillArrowEdgeColor     = "grey"
   res@vcFillArrowFillColor     = "grey"
-  res@vcGlyphOpacityF           =0.2
+  res@vcGlyphOpacityF          = 1.0
   res@vcFillArrowMinFracWidthF = 0.3 
   res@vcFillArrowHeadMinFracXF = 0.3  
   res@vcFillArrowHeadMinFracYF = 0.3 

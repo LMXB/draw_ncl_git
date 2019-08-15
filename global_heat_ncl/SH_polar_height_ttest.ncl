@@ -60,7 +60,7 @@ begin
    res@gsnPolarLabelFontHeightF = g_font
    res@gsnPolar               = "SH"
    res@mpCenterLonF = 280.
-   res@mpMaxLatF              = -30  
+   res@mpMaxLatF              = 0.0  
    res@mpFillOn               = False
    res@mpGeophysicalLineThicknessF = l_thick
    res@mpGridLineThicknessF   = l_thick

@@ -44,7 +44,7 @@ begin
     plot1 = new(1,"graphic")
     plot2 = new(1,"graphic")
    
-  wks = gsn_open_wks("png",outfile)     
+  wks = gsn_open_wks("x11",outfile)     
   gsn_define_colormap(wks,"temp_diff_18lev")
    
   res                 = True  
@@ -55,10 +55,10 @@ begin
   res@gsnRightString  = " "                 
   res@gsnCenterString = " "
 ;  res@gsnCenterStringFontHeightF = g_font  
-   res@gsnPolar               = "SH"
+   ;res@gsnPolar               = "SH"
    res@gsnPolarLabelFontHeightF = g_font
    res@tiMainOn               = False
-   res@mpMaxLatF              = -45  
+   ;res@mpMaxLatF              = -45  
    res@mpFillOn               = False
    res@mpGeophysicalLineThicknessF = l_thick
    res@mpGridLineThicknessF   = l_thick
@@ -95,7 +95,8 @@ begin
   res4@cnFillColor  =  "black"
   res4@cnFillDotSizeF = 0.004
  
-  plot1 = gsn_csm_contour_map_polar(wks,var,res)
+  ;plot1 = gsn_csm_contour_map_polar(wks,var,res)
+  plot1 = gsn_csm_contour_map(wks,var,res)
   plot2 = gsn_csm_contour(wks,pre_diff_sig,res4)
  ; plot = gsn_csm_contour_map_polar(wks,pre_diff_sig,res4)
   overlay(plot1,plot2)

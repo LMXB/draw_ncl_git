@@ -19,21 +19,25 @@ begin
     do j=0,0,1
         case_name=case_name_list(j)
         print(case_name)
+        ;load "global_precc_wind.ncl"
         ;load "global_ptend_ttest.ncl"
         ;load "global_height_ttest.ncl"
         ;load "global_psl_ttest.ncl"
         ;load "global_ts_ttest.ncl"
         ;load "global_precc_ttest.ncl"
         ;load "global_omega_ttest.ncl"
-        ;load "global_temp_ttest.ncl"
+        load "global_temp_ttest.ncl"
+        ;load "error_global_temp_ttest.ncl"
         ;load "global_wind_ttest.ncl"
         ;load "global_u_ttest.ncl"
         ;load "global_div_ttest.ncl"
         ;load "global_temp_advection.ncl"
-        load "global_vortex_advection.ncl"
+        ;load "global_vortex_advection.ncl"
         ;load "global_radiation_ttest.ncl"
         ;load "global_Lradiation_ttest.ncl"
         ;load "global_Sradiation_ttest.ncl"
         ;load "standardized_global_precc_ttest.ncl"
+        ;load "polar_height_ttest.ncl"
+        ;load "SH_polar_height_ttest.ncl" 
     end do
 end

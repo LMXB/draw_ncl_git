@@ -105,7 +105,9 @@ begin
   res_wind@vcRefAnnoArrowUseVecColor = False
   res_wind@vcRefAnnoArrowEdgeColor   ="black"
   res_wind@vcRefAnnoArrowFillColor   ="black"
-  res_wind@vcMinDistanceF            = 0.02
+  res_wind@vcMinDistanceF            = 0.035
+  res_wind@vcMaxMagnitudeF           = 3
+  ;res_wind@vcMinMagnitudeF           = 0.5
 
   ;plot1 = gsn_csm_vector_map(wks,u,v,res)
   plot1  = gsn_csm_contour_map(wks, Vortex_adv, res)

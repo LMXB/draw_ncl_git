@@ -9,8 +9,8 @@ year=ispan(1979,2013,1)  ; 79/80 - 13/14
 it_s=197912  ;起始年月
 it_e=201411  ;结束年月
 
-refmag = 10   ;参考箭头所表示的风速大小
-    outfile    = "/home/ys17-19/cjx/figure/ENSO/comp"+level
+refmag = 5   ;参考箭头所表示的风速大小
+    outfile    = "/home/ys17-19/cjx/figure/ENSO/comp-enso"+level
     ;;;read data ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
        ;;  sst
     
@@ -99,7 +99,7 @@ refmag = 10   ;参考箭头所表示的风速大小
        ensoi = dim_standardize_Wrap(ensoi,1)
     
     ;;;(4) composite ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      irec_positive=ind(ensoi .gt. 0.8)
+      irec_positive=ind(ensoi .gt. 0.8 .or. ensoi .lt. -0.8)
       nnumb = dimsizes(irec_positive) 
       
         
@@ -133,7 +133,7 @@ refmag = 10   ;参考箭头所表示的风速大小
       confi_t = student_t(t_t, nnumb-1) 
         
     ;;;; (5) plot
-      wks = gsn_open_wks("png",outfile)
+      wks = gsn_open_wks("x11",outfile)
       gsn_define_colormap(wks,"rainbow+gray")  ; 调用rainbow+gray色板,，其它色板名称请查阅http://www.ncl.ucar.edu/Document/Graphics/color_table_gallery.shtml
       
       base = new(3,"graphic")
@@ -174,8 +174,8 @@ refmag = 10   ;参考箭头所表示的风速大小
       res@cnInfoLabelOn         = False       ; 关闭图右下方的等值线信息标签
       res@lbLabelBarOn          = False       ; 关闭labelbar
      
-      ;resc@cnLevelSelectionMode  = "ExplicitLevels"                ; 指定每根需绘制的等值线
-      ;resc@cnLevels              = (/-0.75,-0.25,0,0.25,0.75/)  ;   
+      resc@cnLevelSelectionMode  = "ExplicitLevels"                ; 指定每根需绘制的等值线
+      resc@cnLevels              = (/-1,-0.5,0,0.5,1/)  ;   
       resc@cnFillOn              = False     ; 关闭等值线填色 
       resc@cnLineThicknessF      = 2.        ; 等值线粗细  
       resc@gsnContourZeroLineThicknessF = 0. ; 设置0值线粗细。0则不画
@@ -184,39 +184,71 @@ refmag = 10   ;参考箭头所表示的风速大小
       resc@cnInfoLabelOn         = True      ; 打开图右下方的等值线信息标签
       resc@cnInfoLabelOrthogonalPosF = 0.05  ; 移动等值线信息标签的位置
     
-      resv@vcPositionMode            = "ArrowTail"  ;箭头尾部对应着格点的位置
-      resv@vcGlyphStyle              = "Fillarrow"  ;其余三种选项为“LineArrow”、“WindBarb” 、“CurlyVector”
-      resv@vcFillArrowEdgeThicknessF = 2         ; 箭头边界粗细
-      resv@vcFillArrowEdgeColor      = "white"   ; 及颜色
-      resv@vcFillArrowFillColor      = "black"  ; 箭头内部填充颜色
-      resv@vcFillArrowWidthF         = 0.1       ; 箭头宽度
-      resv@vcFillArrowHeadXF         = 0.6       ; 请参考附录中Fillarrow箭头示意图
-      resv@vcFillArrowHeadYF         = 0.2       ;
-      resv@vcFillArrowHeadInteriorXF = 0.25      ; 
-               
-      resv@vcMinDistanceF            = 0.03    ; 箭头之间的最小距离（在单位平方中）
-      resv@vcMinMagnitudeF           = 1.0     ; 要绘制箭头所表示的最小数值，即小于该数值则不绘制
+    resv                 = True  
+    resv@gsnDraw         = False
+    resv@gsnFrame        = False
+    ;resv@lbLabelFontHeightF = g_font
+    resv@gsnMaximize      = True       ; fill up the page
+    resv@gsnLeftString   = " "                   
+    resv@gsnRightString  = " "                 
+    resv@gsnCenterString = " " 
+    ;resv@tmYLLabelFontHeightF = g_font
+    resv@vcGlyphStyle         = "FillArrow" ;  "CurlyVector" , "WindBarb"   
+    resv@mpGridSpacingF         = 10.     ;
+    ;revs@pmTickMarkDisplayMode = "Always"
+    ;; v箭头头部大小一致。若要绘制头部大小不一致箭头可参考第4章示例。
+    resv@vcFillArrowEdgeColor     = "black"
+    resv@vcFillArrowFillColor     = "black"
+    resv@vcFillArrowMinFracWidthF = 0.2 
+    resv@vcFillArrowHeadMinFracXF = 0.2  
+    resv@vcFillArrowHeadMinFracYF = 0.2 
+    ;; v参考箭头
+    resv@vcRefAnnoOn               = True  
+    resv@vcRefMagnitudeF           = 5      ;标准长度箭头所表示的大小
+    resv@vcRefLengthF              = 0.05  ;标准长度箭头在图形中的长度
+    resv@vcRefAnnoBackgroundColor  = "white" ;背景颜色     
+    resv@vcRefAnnoPerimOn          = False   ;关闭边框   
+    resv@vcRefAnnoFontHeightF      = 0.014   ;参考箭头标签字体大小      
+    resv@vcRefAnnoString1On        = False   ;设定参考箭头上、        
+    resv@vcRefAnnoString2On        = True    ;        下的字符
+    resv@vcRefAnnoString2          = "5 m/s" 
+    resv@vcRefAnnoOrthogonalPosF   = 0.155
+    resv@vcMinDistanceF            = 0.02
+    resv@vcRefAnnoArrowEdgeColor   ="black"
+    resv@vcRefAnnoArrowFillColor   ="black"
+      ;;resv@vcPositionMode            = "ArrowTail"  ;箭头尾部对应着格点的位置
+      ;resv@vcGlyphStyle              = "FillArrow"  ;其余三种选项为“LineArrow”、“WindBarb” 、“CurlyVector”
+      ;resv@vcFillArrowEdgeThicknessF = 4         ; 箭头边界粗细
+      ;resv@vcFillArrowEdgeColor      = "white"   ; 及颜色
+      ;resv@vcFillArrowFillColor      = "black"  ; 箭头内部填充颜色
+      ;resv@vcFillArrowWidthF         = 0.2       ; 箭头宽度
+      ;resv@vcFillArrowHeadXF         = 0.2       ; 请参考附录中Fillarrow箭头示意图
+      ;resv@vcFillArrowHeadYF         = 0.2       ;
+      ;resv@vcFillArrowHeadInteriorXF = 0.25      ; 
+      ;         
+      ;resv@vcMinDistanceF            = 0.03    ; 箭头之间的最小距离（在单位平方中）
+      ;resv@vcMinMagnitudeF           = 1.0     ; 要绘制箭头所表示的最小数值，即小于该数值则不绘制
     
-      resv@vcFillArrowMinFracWidthF =1.0 
-      resv@vcFillArrowHeadMinFracXF =1.0  
-      resv@vcFillArrowHeadMinFracYF =1.0 
-      
-        ;****设定参考箭头****
-        resv@vcRefAnnoOn               = True  
-        resv@vcRefMagnitudeF           = refmag  ;标准长度箭头所表示的大小
-        resv@vcRefLengthF              = 0.045   ;标准长度箭头在单位平方中的大小
-        resv@vcRefAnnoBackgroundColor  = "white" ;背景颜色     
-        resv@vcRefAnnoPerimOn          = False   ;关闭边框    
-                                            
-        resv@vcRefAnnoFontHeightF      = 0.015   ;参考箭头标签字体大小      
-        
-        resv@vcRefAnnoString1On     = False   ;设定参考箭头上、下的字符        
-        resv@vcRefAnnoString2On     = True    ; 这里仅设定其下方的字符
-        resv@vcRefAnnoString2       = refmag+" m/s"  
-               
-        resv@vcRefAnnoSide            = "Top" ; 参考箭头放至图形上方
-        resv@vcRefAnnoOrthogonalPosF  = -0.12 ; 调整其位置
-        resv@vcRefAnnoParallelPosF    = 0.95 
+      ;resv@vcFillArrowMinFracWidthF =1.0 
+      ;resv@vcFillArrowHeadMinFracXF =1.0  
+      ;resv@vcFillArrowHeadMinFracYF =1.0 
+      ;
+      ;  ;****设定参考箭头****
+      ;  resv@vcRefAnnoOn               = True  
+      ;  resv@vcRefMagnitudeF           = refmag  ;标准长度箭头所表示的大小
+      ;  resv@vcRefLengthF              = 0.045   ;标准长度箭头在单位平方中的大小
+      ;  resv@vcRefAnnoBackgroundColor  = "white" ;背景颜色     
+      ;  resv@vcRefAnnoPerimOn          = False   ;关闭边框    
+      ;                                      
+      ;  resv@vcRefAnnoFontHeightF      = 0.015   ;参考箭头标签字体大小      
+      ;  
+      ;  resv@vcRefAnnoString1On     = False   ;设定参考箭头上、下的字符        
+      ;  resv@vcRefAnnoString2On     = True    ; 这里仅设定其下方的字符
+      ;  resv@vcRefAnnoString2       = refmag+" m/s"  
+      ;         
+      ;  resv@vcRefAnnoSide            = "Top" ; 参考箭头放至图形上方
+      ;  resv@vcRefAnnoOrthogonalPosF  = -0.12 ; 调整其位置
+      ;  resv@vcRefAnnoParallelPosF    = 0.95 
         
     
       res@gsnCenterString            = "sst" ;子图的主标题 
@@ -257,9 +289,9 @@ refmag = 10   ;参考箭头所表示的风速大小
     
       res@gsnCenterString       = "t"+level  
       resc@cnLevelSelectionMode = "ManualLevels" 
-      resc@cnMaxLevelValF       = 4
-      resc@cnMinLevelValF       = -4 
-      resc@cnLevelSpacingF      = 0.5    
+      resc@cnMaxLevelValF       = 1
+      resc@cnMinLevelValF       = -1 
+      resc@cnLevelSpacingF      = 0.1    
       base(2) = gsn_csm_contour_map(wks,confi_t,res)  
       plot(2) = gsn_csm_contour(wks,t_comp,resc) 
       plot(2) = ColorNegDashZeroPosContour(plot(2),"blue","black","red")

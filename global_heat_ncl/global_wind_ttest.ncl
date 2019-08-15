@@ -1,7 +1,7 @@
 begin
 ;case_name="HEAT_MC"
   level=(/1000,850,500,200/)
-  do i=1,1,1
+  do i=0,3,1
   ;outfile="/home/ys17-19/cjx/figure/heat_test_figure/global_wind_"+level(i)+"_ttest"
   outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/"+season+" global_wind_"+level(i)+"_ttest"
   ;HEAT_file="/home/ys17-19/cjx/all_output_data/HEAT_MC_output/HEAT_MC.cam.h0.250-289.nc"
@@ -30,7 +30,7 @@ begin
   ;GW_file="/home/ys17-19/cjx/CTRL_data/B2000_raw_data/B2000_f19g16_CP_CTRL.cam.h0.0252-02.nc"
   GW_IN=addfile(GW_file,"r")
   gw=GW_IN->gw
-  siglvl = 0.05
+  siglvl = 0.1
   x1tmp = u_heat_ssn(lat |:,lon |:,time |:)
   y1tmp = u_ctrl_ssn(lat |:,lon |:,time |:)
   aveX1 = dim_avg(x1tmp)
@@ -100,20 +100,20 @@ begin
 
   res@vcFillArrowEdgeColor     = "grey"
   res@vcFillArrowFillColor     = "grey"
-  res@vcGlyphOpacityF           =0.2
-  res@vcFillArrowMinFracWidthF = 0.3 
-  res@vcFillArrowHeadMinFracXF = 0.3  
-  res@vcFillArrowHeadMinFracYF = 0.3 
+  res@vcGlyphOpacityF          = 1.0
+  res@vcFillArrowMinFracWidthF = 0.2 
+  res@vcFillArrowHeadMinFracXF = 0.2  
+  res@vcFillArrowHeadMinFracYF = 0.2 
   ;; 参考箭头
   res@vcRefAnnoOn               = True  
-  res@vcRefMagnitudeF           = 2      ;标准长度箭头所表示的大小
+  res@vcRefMagnitudeF           = 5      ;标准长度箭头所表示的大小
   res@vcRefLengthF              = 0.05  ;标准长度箭头在图形中的长度
   res@vcRefAnnoBackgroundColor  = "white" ;背景颜色     
   res@vcRefAnnoPerimOn          = False   ;关闭边框   
   res@vcRefAnnoFontHeightF      = 0.014   ;参考箭头标签字体大小      
   res@vcRefAnnoString1On        = False   ;设定参考箭头上、        
   res@vcRefAnnoString2On        = True    ;        下的字符
-  res@vcRefAnnoString2          = "2 m/s" 
+  res@vcRefAnnoString2          = "5 m/s" 
   res@vcRefAnnoOrthogonalPosF   = 0.155
   res@vcRefAnnoArrowUseVecColor = False
   res@vcRefAnnoArrowEdgeColor   ="black"
@@ -139,19 +139,19 @@ begin
   ;; 4箭头头部大小一致。若要绘制头部大小不一致箭头可参考第4章示例。
   res4@vcFillArrowEdgeColor     = "black"
   res4@vcFillArrowFillColor     = "black"
-  res4@vcFillArrowMinFracWidthF = 0.3 
-  res4@vcFillArrowHeadMinFracXF = 0.3  
-  res4@vcFillArrowHeadMinFracYF = 0.3 
+  res4@vcFillArrowMinFracWidthF = 0.2 
+  res4@vcFillArrowHeadMinFracXF = 0.2  
+  res4@vcFillArrowHeadMinFracYF = 0.2 
   ;; 4参考箭头
   res4@vcRefAnnoOn               = True  
-  res4@vcRefMagnitudeF           = 2      ;标准长度箭头所表示的大小
+  res4@vcRefMagnitudeF           = 5      ;标准长度箭头所表示的大小
   res4@vcRefLengthF              = 0.05  ;标准长度箭头在图形中的长度
   res4@vcRefAnnoBackgroundColor  = "white" ;背景颜色     
   res4@vcRefAnnoPerimOn          = False   ;关闭边框   
   res4@vcRefAnnoFontHeightF      = 0.014   ;参考箭头标签字体大小      
   res4@vcRefAnnoString1On        = False   ;设定参考箭头上、        
   res4@vcRefAnnoString2On        = True    ;        下的字符
-  res4@vcRefAnnoString2          = "2 m/s" 
+  res4@vcRefAnnoString2          = "5 m/s" 
   res4@vcRefAnnoOrthogonalPosF   = 0.155
   res4@vcMinDistanceF            = 0.02
   res4@vcRefAnnoArrowEdgeColor   ="black"

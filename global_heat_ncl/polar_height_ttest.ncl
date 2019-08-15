@@ -45,7 +45,7 @@ begin
     plot1 = new(1,"graphic")
     plot2 = new(1,"graphic")
    
-  wks = gsn_open_wks("x11",outfile)     
+  wks = gsn_open_wks("png",outfile)     
   gsn_define_colormap(wks,"BlueWhiteOrangeRed")
    
   res                 = True  
@@ -58,7 +58,7 @@ begin
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@gsnPolar               = "NH"
    res@gsnPolarLabelFontHeightF = g_font
-   res@mpCenterLonF = 90
+   res@mpCenterLonF = 110
    res@mpMaxLatF              = 30  
    res@mpFillOn               = False
    res@mpGeophysicalLineThicknessF = l_thick

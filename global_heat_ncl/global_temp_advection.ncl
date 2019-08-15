@@ -77,16 +77,16 @@ begin
   res@mpGridLineThicknessF   = l_thick
   res@tmXBLabelFontHeightF = g_font
   res@tmYLLabelFontHeightF = g_font
-  res@mpMaxLatF= 90
-  res@mpMinLatF= -90
-  res@mpMinLonF= 0
-  res@mpMaxLonF= 360
+  res@mpMaxLatF = 90
+  res@mpMinLatF = -90
+  res@mpMinLonF = 0
+  res@mpMaxLonF = 360
   ;res@mpMaxLatF=lat_N
   ;res@mpMinLatF=lat_S
   ;res@mpMaxLonF=lon_W
   ;res@mpMinLonF=lon_E
 
-  res_wind                      = True
+  res_wind                 = True
   res_wind@gsnDraw         = False
   res_wind@gsnFrame        = False
   res_wind@vcGlyphStyle         = "FillArrow" ;  "CurlyVector" , "WindBarb"   
@@ -107,7 +107,10 @@ begin
   res_wind@vcRefAnnoArrowUseVecColor = False
   res_wind@vcRefAnnoArrowEdgeColor   ="black"
   res_wind@vcRefAnnoArrowFillColor   ="black"
-  res_wind@vcMinDistanceF            = 0.02
+  res_wind@vcMinDistanceF            = 0.035
+  res_wind@vcMaxMagnitudeF           = 3
+  ;res_wind@vcMinMagnitudeF           = 0.5
+
   
   plot1  = gsn_csm_contour_map(wks,Temp_adv,res)
   plot2  = gsn_csm_vector(wks,u_in,v_in,res_wind)
