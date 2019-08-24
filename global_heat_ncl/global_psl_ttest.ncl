@@ -2,8 +2,8 @@ begin
   ;case_name="HEAT_MC"
   g_font = 0.025
   l_thick= 2
-  ;outfile="/home/ys17-19/cjx/figure/HEAT_MC_figure/global_psl_ttest"
-  outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/"+season+" global_psl_ttest"
+  ;outfile="/home/ys17-19/cjx/figure/HEAT_MC_figure/global_epsl_ttest"
+  outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/"+season+" global_epsl_ttest"
   ;HEAT_file="/home/ys17-19/cjx/all_output_data/HEAT_MC_output/HEAT_MC.cam.h0.250-289.nc"
   HEAT_file="/home/ys17-19/cjx/all_output_data/"+case_name+"_output/"+case_name+".cam.h0.250-289.nc"
   ;CTRL_file="/home/ys17-19/cjx/all_output_data/B2000_CTRL_output/B2000_f19g16_CP_CTRL.cam.h0.250-289.nc"
@@ -40,7 +40,7 @@ begin
     plot1 = new(1,"graphic")
     plot2 = new(1,"graphic")
    
-  wks = gsn_open_wks("png",outfile)     
+  wks = gsn_open_wks("eps",outfile)     
   gsn_define_colormap(wks,"BlueWhiteOrangeRed")
    
   res                 = True  
@@ -49,7 +49,7 @@ begin
   res@gsnMaximize      = True       ; fill up the page
   res@gsnLeftString   = " "                   
   res@gsnRightString  = " "                 
-  res@gsnCenterString = season+" psl Diff "
+  res@gsnCenterString = season+" epsl Diff "
 ;  res@gsnCenterStringFontHeightF = g_font  
    res@tiMainOn               = False
    res@mpFillOn               = False

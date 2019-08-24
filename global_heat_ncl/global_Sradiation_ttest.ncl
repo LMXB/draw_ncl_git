@@ -48,7 +48,7 @@ begin
     plot1 = new(1,"graphic")
     plot2 = new(1,"graphic")
   
-  wks = gsn_open_wks("png",outfile)     
+  wks = gsn_open_wks("eps",outfile)     
   gsn_define_colormap(wks,"BlueWhiteOrangeRed")
    
   res                 = True  

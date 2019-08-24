@@ -1,11 +1,11 @@
 begin
     ;define parameter
-    case_name_list=(/"HEAT_EMC","HEAT_MC","HEAT_SA"/)
+    case_name_list=(/"HEAT_MC_SON","HEAT_EMC","HEAT_MC","HEAT_SA"/)
     ;lon_array=(/10.0, 115.0, 140.0, 155.0, 231.0,  284.0, 310.0/)
     ;lat_array=(/0.0,  0.0,   -5.0,  5.0,   5.0,    0.0,   0.0/)
-    lon_array=(/115, 140.0, 310.0/)
-    lat_array=(/0, -5.0,  0.0 /)
-    season="MAM"
+    lon_array=(/140.0, 115, 140.0, 310.0/)
+    lat_array=(/-5.0, 0.0, -5.0,  0.0 /)
+    season="SON"
     lat_N=90
     lat_S=-90
     lon_E=0
@@ -22,11 +22,11 @@ begin
         ;load "global_precc_wind.ncl"
         ;load "global_ptend_ttest.ncl"
         ;load "global_height_ttest.ncl"
-        ;load "global_psl_ttest.ncl"
+        ;load "global_epsl_ttest.ncl"
         ;load "global_ts_ttest.ncl"
-        ;load "global_precc_ttest.ncl"
+        load "global_precc_ttest.ncl"
         ;load "global_omega_ttest.ncl"
-        load "global_temp_ttest.ncl"
+        ;load "global_temp_ttest.ncl"
         ;load "error_global_temp_ttest.ncl"
         ;load "global_wind_ttest.ncl"
         ;load "global_u_ttest.ncl"

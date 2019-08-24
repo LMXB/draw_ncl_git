@@ -3,7 +3,7 @@ begin
   ;case_name="HEAT_F"
   g_font = 0.025
   l_thick= 2
-  wks = gsn_open_wks("png","/home/ys17-19/cjx/figure/error")     
+  wks = gsn_open_wks("eps","/home/ys17-19/cjx/figure/error")     
   gsn_define_colormap(wks,"BlueWhiteOrangeRed")
   plot1 = new((/8/),graphic)
   plot2 = new((/8/),graphic)

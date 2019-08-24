@@ -4,16 +4,12 @@ begin
   ;case_name="HEAT_F"
   g_font = 0.025
   l_thick= 2
-  outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/"+season+" global_temp__ttest"
   HEAT_file="/home/ys17-19/cjx/all_output_data/"+case_name+"_output/"+case_name+".cam.h0.250-289.nc"
   fin_heat = addfile(HEAT_file,"r")
   fin_ctrl = addfile(CTRL_file,"r")
-  wks = gsn_open_wks("ps",outfile)     
-  gsn_define_colormap(wks,"BlueWhiteOrangeRed")
-  plot1 = new(1,"graphic")
-  plot2 = new(1,"graphic")
 
   do i=0,2,1
+    outfile="/home/ys17-19/cjx/figure/"+case_name+"_figure/"+season+" global_temp_"+level(i)+"_ttest"
     pre_heat = fin_heat->T(120:479:1,{level(i)},:,:)
     pre_ctrl = fin_ctrl->T(120:479:1,{level(i)},:,:)
     pre_heat_ssn = month_to_season(pre_heat,season)
@@ -45,6 +41,10 @@ begin
     ;printVarSummary(prob)
     ;printVarSummary(pre_diff_sig)
 
+    wks = gsn_open_wks("eps",outfile)     
+    gsn_define_colormap(wks,"BlueWhiteOrangeRed")
+    plot1 = new(1,"graphic")
+    plot2 = new(1,"graphic")
      
     res                 = True  
     res@gsnDraw         = False
